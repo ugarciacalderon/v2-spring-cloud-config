@@ -1,6 +1,6 @@
 services:
   network-deploy-service:
-    network:
+    networks:
       - ugarciac
 
   microservice-base-config:
