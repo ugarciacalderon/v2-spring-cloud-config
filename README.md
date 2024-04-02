@@ -33,3 +33,6 @@ It is a framework that links all the nodes of a distributed system through a mes
 - This api contains H2 database: http://localhost:8080/h2-console/
 - This api contains springdoc-openapi: http://localhost:8080/swagger-ui/index.html
 - To generate docker images is used Google Jib
+
+### Create Database with Container Docker
+- docker run -p 3306:3306 --name accountsdb -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=accountsdb -d mysql

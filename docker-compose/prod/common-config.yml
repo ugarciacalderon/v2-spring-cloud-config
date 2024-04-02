@@ -2,7 +2,20 @@ services:
   network-deploy-service:
     networks:
       - ugarciac
-
+  #--------------------------------------------- COMMON CONFIG DB ---------------------------------------------#
+  microservices-db-config:
+    extends:
+      service: network-deploy-service
+    image: mysql
+    healthcheck:
+      test: [ "CMD","mysqladmin","ping","-h","localhost" ]
+      timeout: 10s
+      retries: 10
+      interval: 10s
+      start_period: 10s
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+  #--------------------------------------------- COMMON CONFIG MICROSERVICE ---------------------------------------------#
   microservice-base-config:
     extends:
       service: network-deploy-service
@@ -12,7 +25,7 @@ services:
           memory: 700m
     environment:
       SPRING_RABBITMQ_HOST: "rabbit"
-
+  #--------------------------------------------- COMMON CONFIG SERVER ---------------------------------------------#
   microservice_configserver-config:
     extends:
       service: microservice-base-config
@@ -22,5 +35,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
 
 
