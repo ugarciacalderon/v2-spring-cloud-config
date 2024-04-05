@@ -1,6 +1,7 @@
 package org.ulisesgc.accounts.mapper;
 
 import org.ulisesgc.accounts.dto.CustomerDTO;
+import org.ulisesgc.accounts.dto.CustomerDetailsDto;
 import org.ulisesgc.accounts.entity.Customer;
 
 public class CustomerMapper {
@@ -16,5 +17,12 @@ public class CustomerMapper {
         customer.setEmail(customerDTO.getEmail());
         customer.setMobileNumber(customerDTO.getMobileNumber());
         return customer;
+    }
+
+    public static CustomerDetailsDto mapToCustomeDetailsDTO(Customer customer, CustomerDetailsDto customerDetailsDto) {
+        customerDetailsDto.setName(customer.getName());
+        customerDetailsDto.setEmail(customer.getEmail());
+        customerDetailsDto.setMobileNumber(customer.getMobileNumber());
+        return customerDetailsDto;
     }
 }
