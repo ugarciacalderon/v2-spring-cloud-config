@@ -1,28 +1,10 @@
 services:
-  rabbit:
-    image: rabbitmq:3.12-management
-    hostname: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    healthcheck:
-      test: rabbitmq-diagnostics check_port_connectivity
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 5s
-    extends:
-      file: common-config.yml
-      service: network-deploy-service
-
+  #--------------------------------------------- CONFIG CONFIG-SERVER ---------------------------------------------#
   configserver:
-    image: "octomagiccode/configserver:s6"
+    image: "octomagiccode/configserver:s8"
     container_name: configserver-ms
     ports:
       - "8071:8071"
-    depends_on:
-      rabbit:
-        condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
       interval: 10s
@@ -32,9 +14,26 @@ services:
     extends:
       file: common-config.yml
       service: microservice-base-config
-
+  #--------------------------------------------- CONFIG EUREKA SERVER ---------------------------------------------#
+  eurekaserver:
+    image: "octomagiccode/eurekaserver:s8"
+    container_name: eurekaserver-ms
+    ports:
+      - "8070:8070"
+    healthcheck:
+      test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+    environment:
+      SPRING_APPLICATION_NAME: "eurekaserver"
+  #--------------------------------------------- CONFIG ACCOUNTS MS ---------------------------------------------#
   accounts:
-    image: "octomagiccode/accounts:s6"
+    image: "octomagiccode/accounts:s8"
     container_name: accounts-ms
     ports:
       - "8080:8080"
@@ -42,10 +41,10 @@ services:
       SPRING_APPLICATION_NAME: "accounts"
     extends:
       file: common-config.yml
-      service: microservice_configserver-config
-
+      service: microservice-eureka-config
+  #--------------------------------------------- CONFIG LOANS MS ---------------------------------------------#
   loans:
-    image: "octomagiccode/loans:s6"
+    image: "octomagiccode/loans:s8"
     container_name: loans-ms
     ports:
       - "8090:8090"
@@ -53,10 +52,10 @@ services:
       SPRING_APPLICATION_NAME: "loans"
     extends:
       file: common-config.yml
-      service: microservice_configserver-config
-
+      service: microservice-eureka-config
+  #--------------------------------------------- CONFIG CARDS MS ---------------------------------------------#
   cards:
-    image: "octomagiccode/cards:s6"
+    image: "octomagiccode/cards:s8"
     container_name: cards-ms
     ports:
       - "9000:9000"
@@ -64,8 +63,43 @@ services:
       SPRING_APPLICATION_NAME: "cards"
     extends:
       file: common-config.yml
-      service: microservice_configserver-config
+      service: microservice-eureka-config
 
+  #--------------------------------------------- CONFIG NEW INSTANCES ---------------------------------------------#
+  #--------------------------------------------- CONFIG ACCOUNTS MS ---------------------------------------------#
+  accounts_back:
+    image: "octomagiccode/accounts:s8"
+    container_name: accounts-back
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_NAME: "accounts"
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+  #--------------------------------------------- CONFIG LOANS MS ---------------------------------------------#
+  loans_back:
+    image: "octomagiccode/loans:s8"
+    container_name: loans-back
+    ports:
+      - "8090:8090"
+    environment:
+      SPRING_APPLICATION_NAME: "loans"
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+  #--------------------------------------------- CONFIG CARDS MS ---------------------------------------------#
+  cards_back:
+    image: "octomagiccode/cards:s8"
+    container_name: cards-back
+    ports:
+      - "9000:9000"
+    environment:
+      SPRING_APPLICATION_NAME: "cards"
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+  #--------------------------------------------- CONFIG NETWORK OF MS ---------------------------------------------#
 networks:
   ugarciac:
     driver: "bridge"
