@@ -1,3 +1,6 @@
 [submodule "config"]
 	path = config
 	url = git@github.com:ugarciacalderon/config.git
+[submodule "gateway_server"]
+	path = gateway_server
+	url = git@github.com:ugarciacalderon/gateway_server.git
