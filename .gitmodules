@@ -4,3 +4,6 @@
 [submodule "gateway_server"]
 	path = gateway_server
 	url = git@github.com:ugarciacalderon/gateway_server.git
+[submodule "eureka_server"]
+	path = eureka_server
+	url = git@github.com:ugarciacalderon/eureka_server.git
