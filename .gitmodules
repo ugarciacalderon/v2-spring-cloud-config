@@ -10,3 +10,6 @@
 [submodule "config_server"]
 	path = config_server
 	url = git@github.com:ugarciacalderon/config_server.git
+[submodule "docker_compose"]
+	path = docker_compose
+	url = git@github.com:ugarciacalderon/docker_compose.git
