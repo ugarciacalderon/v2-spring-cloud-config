@@ -7,3 +7,6 @@
 [submodule "eureka_server"]
 	path = eureka_server
 	url = git@github.com:ugarciacalderon/eureka_server.git
+[submodule "config_server"]
+	path = config_server
+	url = git@github.com:ugarciacalderon/config_server.git
