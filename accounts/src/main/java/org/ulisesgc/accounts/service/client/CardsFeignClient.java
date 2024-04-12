@@ -11,6 +11,6 @@ import org.ulisesgc.accounts.dto.CardsDto;
 public interface CardsFeignClient {
 
     @GetMapping(value = "/api/fetch", consumes = "application/json")
-    public ResponseEntity<CardsDto> fetchCardDetails(@RequestHeader("ugarciac-correlation_id") String correlationId,
+    public ResponseEntity<CardsDto> fetchCardDetails(@RequestHeader("ugarciac-correlation-id") String correlationId,
                                                      @RequestParam String mobileNumber);
 }

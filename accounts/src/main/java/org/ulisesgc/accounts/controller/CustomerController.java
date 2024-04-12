@@ -54,10 +54,10 @@ public class CustomerController {
             description = "REST API to fetch Customer details based on a mobile number"
     )
     @GetMapping("/fetchCustomerDetails")
-    public ResponseEntity<CustomerDetailsDto> fetchCustomerDetails(@RequestHeader("ugarciac-correlation_id") String correlationId,
+    public ResponseEntity<CustomerDetailsDto> fetchCustomerDetails(@RequestHeader("ugarciac-correlation-id") String correlationId,
             @Valid @RequestParam @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
                                                                        String mobileNumber) {
-        logger.debug("ugarciac-correlation_id {}", correlationId);
+        logger.debug("ugarciac-correlation-id {}", correlationId);
         CustomerDetailsDto customerDetailsDto = customerService.fetchCustomerDetails(mobileNumber, correlationId);
         return ResponseEntity.status(HttpStatus.OK).body(customerDetailsDto);
     }
