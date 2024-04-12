@@ -8,14 +8,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.ulisesgc.accounts.dto.CustomerDetailsDto;
 import org.ulisesgc.accounts.responses.ErrorResponseDTO;
 import org.ulisesgc.accounts.service.CustomerService;
@@ -28,6 +27,8 @@ import org.ulisesgc.accounts.service.CustomerService;
 @RequestMapping(path="/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @Validated
 public class CustomerController {
+
+    private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
     private final CustomerService customerService;
 
@@ -52,11 +53,12 @@ public class CustomerController {
             summary = "Fetch Customer Details REST API",
             description = "REST API to fetch Customer details based on a mobile number"
     )
-    @GetMapping("fetchCustomerDetails")
-    public ResponseEntity<CustomerDetailsDto> fetchCustomerDetails(@Valid @RequestParam
-                                                                   @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+    @GetMapping("/fetchCustomerDetails")
+    public ResponseEntity<CustomerDetailsDto> fetchCustomerDetails(@RequestHeader("ugarciac-correlation_id") String correlationId,
+            @Valid @RequestParam @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
                                                                        String mobileNumber) {
-        CustomerDetailsDto customerDetailsDto = customerService.fetchCustomerDetails(mobileNumber);
+        logger.debug("ugarciac-correlation_id {}", correlationId);
+        CustomerDetailsDto customerDetailsDto = customerService.fetchCustomerDetails(mobileNumber, correlationId);
         return ResponseEntity.status(HttpStatus.OK).body(customerDetailsDto);
     }
 }

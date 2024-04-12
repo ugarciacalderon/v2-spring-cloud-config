@@ -28,7 +28,7 @@ public class CustomerDetailsServiceImpl implements CustomerService {
     private LoansFeignClient loansFeignClient;
 
     @Override
-    public CustomerDetailsDto fetchCustomerDetails(String mobileNumber) {
+    public CustomerDetailsDto fetchCustomerDetails(String mobileNumber, String correlationId) {
         Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
                 () -> new ResourceNotFoundException("Customer","mobileNumber",mobileNumber)
         );
@@ -40,10 +40,10 @@ public class CustomerDetailsServiceImpl implements CustomerService {
         AccountsDTO accountsDTO = AccountsMapper.mapToAccountDTO(accounts, new AccountsDTO());
         customerDetailsDto.setAccountsDTO(accountsDTO);
         // se conectara con eureka para obtener los detalles del servicio de prestamos (loans) y realizar el balanceo
-        ResponseEntity<LoansDto> loansDtoResponseEntity = loansFeignClient.fetchLoansDetails(mobileNumber);
+        ResponseEntity<LoansDto> loansDtoResponseEntity = loansFeignClient.fetchLoansDetails(correlationId, mobileNumber);
         customerDetailsDto.setLoansDTO(loansDtoResponseEntity.getBody());
 
-        ResponseEntity<CardsDto> cardsDtoResponseEntity = cardsFeignClient.fetchCardDetails(mobileNumber);
+        ResponseEntity<CardsDto> cardsDtoResponseEntity = cardsFeignClient.fetchCardDetails(correlationId, mobileNumber);
         customerDetailsDto.setCardDTO(cardsDtoResponseEntity.getBody());
 
         return customerDetailsDto;

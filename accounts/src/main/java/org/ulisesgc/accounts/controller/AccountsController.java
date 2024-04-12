@@ -76,7 +76,7 @@ public class AccountsController {
             description = "Rest API to create new Customer & Account inside"
     )
     @ResponseBody
-    @PostMapping("/newAccount")
+    @PostMapping("/new")
     public ResponseEntity<ResponseDTO> createAccount(@Valid @RequestBody CustomerDTO customerDTO) {
         accountService.createAccount(customerDTO);
         return ResponseEntity.status(HttpStatus.CREATED)

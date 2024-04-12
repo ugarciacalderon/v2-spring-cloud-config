@@ -52,3 +52,9 @@ info:
     name: "accounts_ms"
     description: "uarciac Accounts Application"
     version: "1.0.01"
+
+logging:
+  level:
+    com:
+      ulisesgc:
+        accounts: DEBUG
