@@ -97,7 +97,7 @@ public class LoansController {
     }
     )
     @GetMapping("/fetch")
-    public ResponseEntity<LoansDto> fetchLoanDetails(@RequestHeader String correlationId,
+    public ResponseEntity<LoansDto> fetchLoanDetails(@RequestHeader("ugarciac-correlation-id") String correlationId,
             @RequestParam @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
                                                      String mobileNumber) {
         logger.debug("ugarciac-correlation-id: {}", correlationId);
