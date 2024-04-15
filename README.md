@@ -33,3 +33,6 @@ It is a framework that links all the nodes of a distributed system through a mes
 - This api contains H2 database: http://localhost:8080/h2-console/
 - This api contains springdoc-openapi: http://localhost:8080/swagger-ui/index.html
 - To generate docker images is used Google Jib
+
+
+![img.png](img.png)
