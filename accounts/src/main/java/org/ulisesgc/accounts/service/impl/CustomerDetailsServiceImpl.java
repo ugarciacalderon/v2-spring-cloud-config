@@ -41,10 +41,13 @@ public class CustomerDetailsServiceImpl implements CustomerService {
         customerDetailsDto.setAccountsDTO(accountsDTO);
         // se conectara con eureka para obtener los detalles del servicio de prestamos (loans) y realizar el balanceo
         ResponseEntity<LoansDto> loansDtoResponseEntity = loansFeignClient.fetchLoansDetails(correlationId, mobileNumber);
-        customerDetailsDto.setLoansDTO(loansDtoResponseEntity.getBody());
-
+        if ( null != loansDtoResponseEntity) {
+            customerDetailsDto.setLoansDTO(loansDtoResponseEntity.getBody());
+        }
         ResponseEntity<CardsDto> cardsDtoResponseEntity = cardsFeignClient.fetchCardDetails(correlationId, mobileNumber);
-        customerDetailsDto.setCardDTO(cardsDtoResponseEntity.getBody());
+        if ( null != cardsDtoResponseEntity) {
+            customerDetailsDto.setCardDTO(cardsDtoResponseEntity.getBody());
+        }
 
         return customerDetailsDto;
     }

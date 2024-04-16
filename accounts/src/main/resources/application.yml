@@ -20,6 +20,11 @@ spring:
       enabled: true
   config:
     import: "optional:configserver:http://localhost:8071/"
+  cloud: # configuration of circuitbreaker-resilience4j
+    openfeign:
+      circuitbreaker:
+        alphanumeric-ids:
+          enabled: true
 
 management:
   endpoints:
@@ -66,3 +71,12 @@ logging:
     com:
       ulisesgc:
         accounts: DEBUG
+
+#--------------------------------------------- configuration of circuitbreaker-resilience4j ---------------------------------------------#
+resilience4j.circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 2
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
