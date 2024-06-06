@@ -36,3 +36,11 @@ It is a framework that links all the nodes of a distributed system through a mes
 
 
 ![img.png](img.png)
+
+# Orden de Ejecución
+- configserver
+- eureka_server
+- gateway_server
+- accounts
+- cards
+- loans
