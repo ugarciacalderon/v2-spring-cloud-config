@@ -2,11 +2,16 @@ server:
   port: 9000
 spring:
   application:
-    name: "cards"
+    name: "cards" # este es el nombre de la aplicación, el cuál se mostrarará en el tablero de eureka
   profiles:
     active: "prod"
   config:
     import: "optional:configserver:http://localhost:8071/"
+  cloud: # configuration of circuitbreaker-resilience4j
+    openfeign:
+      circuitbreaker:
+        alphanumeric-ids:
+          enabled: true
 
 management:
   endpoints:
@@ -24,9 +29,16 @@ management:
     health:
       probes:
         enabled: true
-    info:
-      env:
-        enabled: true
+  info:
+    env:
+      enabled: true
+
+#--------------------------------------------- Información del Microservicio ---------------------------------------------#
+info:
+  app:
+    name: "cards"
+    description: "uarciac Cards Application"
+    version: "1.0.0"
 
 endpoints:
   shutdown:
@@ -42,14 +54,17 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8070/eureka/
 
-info:
-  app:
-    name: "cards_ms"
-    description: "uarciac Cards Application"
-    version: "1.0.01"
-
 logging:
   level:
     com:
       ulisesgc:
         cards: DEBUG
+
+#--------------------------------------------- configuration of circuitbreaker-resilience4j ---------------------------------------------#
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 2
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10000
