@@ -2,17 +2,22 @@ server:
   port: 8090
 spring:
   application:
-    name: "loans"
+    name: "loans" # este es el nombre de la aplicación, el cuál se mostrarará en el tablero de eureka
   profiles:
     active: "prod"
   config:
     import: "optional:configserver:http://localhost:8071/"
+  cloud: # configuration of circuitbreaker-resilience4j
+    openfeign:
+      circuitbreaker:
+        alphanumeric-ids:
+          enabled: true
 
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: "*"  # le indica al actuator de spring cloud que referesque las propiedades en tiempo de ejecución
   health:
     readiness-state:
       enabled: true
@@ -24,9 +29,16 @@ management:
     health:
       probes:
         enabled: true
-    info:
-      env:
-        enabled: true
+  info:
+    env:
+      enabled: true
+
+#--------------------------------------------- Información del Microservicio ---------------------------------------------#
+info:
+  app:
+    name: "loans"
+    description: "uarciac Loans Application"
+    version: "1.0.0"
 
 endpoints:
   shutdown:
@@ -42,15 +54,18 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8070/eureka/
 
-info:
-  app:
-    name: "loan_ms"
-    description: "uarciac Loan Application"
-    version: "1.0.01"
-
 
 logging:
   level:
     com:
       example:
         loans: DEBUG
+
+#--------------------------------------------- configuration of circuitbreaker-resilience4j ---------------------------------------------#
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 2
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10000
